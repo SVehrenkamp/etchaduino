@@ -6,7 +6,7 @@ This project uses basic components from the arduino starter kit to create an etc
 ## Requirements
  - johnny-five compatible arduino board
  - (2) potentiometers
- - (1) 10 kilohm resister
+ - (1) 10 kilohm resistor
  - (1) tilt switch
 
 ## Circuit Configuration
