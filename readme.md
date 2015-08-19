@@ -9,6 +9,9 @@ This project uses basic components from the arduino starter kit to create an etc
  - (1) 10 kilohm resister
  - (1) tilt switch
 
+## Circuit Configuration
+![alt tag](https://raw.github.com/SVehrenkamp/etchaduino/master/sketch.jpg)
+
 ## Installation
 Make sure firmata has been loaded onto your arduino board.
 Run ```npm install``` to install dependencies
