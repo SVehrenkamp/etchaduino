@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Etcho.js</title>
+ 
+  <!-- Bootstrap CSS -->
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <style type="text/css">
+  #wrapper{
+  	width:1024px;
+  	margin:0;
+  	padding:0;
+  }
+  #canvas {
+    margin:20px 0px 0px 0px;
+    width:1024px;
+    height:1024px;
+    background:#ddd;
+  }
+  .wipe{
+  	opacity:0;
+  }
+  .board{
+  	-webkit-transition: opacity 0.5s ease-in-out;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
+	transition: opacity 0.5s ease-in-out;
+  }
+  h1{
+  	display:block;
+  	text-align: center;
+  	color:#666666;
+  }
+  </style>
+ 
+  <!-- jQuery -->
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <!-- Bootstrap JavaScript -->
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="etcho.js"></script>
+
+</head>
+ 
+<style>
+</style>
+<body class="container">
+ <div id="wrapper">
+ 	<h1>Etch-a-duino	</h1>
+ 	<div id="canvas"></div>
+ 	<h5 class="pull-center">by scott vehrenkamp</h5>
+ </div>	
+ 	
+ <script type="text/javascript">
+  var x_position,
+      y_position;
+  var container = document.getElementById('canvas');
+  var app = new App(container, 1024, 1024, '#ddd');
+
+  var socket = io();
+  socket.on('start', function(data) {
+  	console.log('Started..', data[0], data[1]);
+  	x_position = data[0];
+  	y_position = data[1];
+  });
+  
+  //////////////////////////
+  //Hanle Horizontal Change
+  //////////////////////////
+  socket.on('horiz-change', function(data){
+
+  	var diff = data - x_position;
+  	console.log(diff, " = ", data, " - ", x_position);
+
+  	if(data > x_position){
+  		for(var i=0; i < diff; i++){
+	  		app.draw_horiz(x_position++, y_position);
+	  	}
+	  	x_position = data;
+  	} else {
+  		for(var i=0; i > diff; i--){
+	  		app.draw_horiz(x_position--, y_position);
+	  	}
+	  	x_position = data;
+	}
+
+  });
+
+  //////////////////////////
+  //Hanle Vertical Change
+  //////////////////////////
+  socket.on('vert-change', function(data){
+
+  	var diff = data - y_position;
+  	console.log(diff);
+
+  	if(data > y_position){
+	  	for(var i=0; i < diff; i++){
+	  		app.draw_vert(y_position++, x_position);
+	  	}
+	  	y_position = data;
+  	} else{
+  		for(var i=0; i > diff; i--){
+	  		app.draw_vert(y_position--, x_position);
+	  	}
+	  	y_position = data;
+  	}
+
+  });
+
+  //////////////////////////
+  //Wipe Screern
+  //////////////////////////
+  socket.on('wipe', function(){
+
+  	app.clear_screen();
+
+  });
+
+
+ </script>
+</body>
+ 
+</html>
